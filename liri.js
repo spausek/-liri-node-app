@@ -30,17 +30,17 @@ function showTweets(commands){
 	var username = inputString[3];
 
 	if(!username){
-			username ="RagnarGoldburg";
+			username = "RagnarGoldburg";
 		}
-		params = {screen_name: username};
-		client.get("statuses/user_timeline/", params, function(error, data, response){
+		var searchQuery = {screen_name: username};
+		client.get("statuses/user_timeline/", searchQuery, function(error, data, response){
 			if (!error) {
 				for(var i = 0; i < data.length; i++) {
 				
 					var twitterResults = 
 					"@" + data[i].user.screen_name + ": " + data[i].text;
 					console.log(twitterResults);
-					console.log(twitterResults); 
+					//console.log(twitterResults); 
 				}
 			}  else {
 				console.log("Error :"+ error);
@@ -48,7 +48,18 @@ function showTweets(commands){
 			}
 		});
 
+}
 
-
-
+function spotifySong(commands) {
+	var song = inputString[3];
+	if(!song){
+		song = 'The Sign';
+	}
+	
+	Spotify.search({type:'track', query:song}, function (err,data){
+		if(err){
+			return console.log('Error occurred: ' + err);
+		}
+		console.log(data);
+	})
 }
