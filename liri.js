@@ -57,7 +57,21 @@ function spotifySong(commands) {
 	}
 	
 	Spotify.search({type:'track', query:song}, function (err,data){
-		if(err){
+		if(!err){
+			songData = data.tracks.items;
+			for (var i = 0; i < 5; i++){
+				if (songData != undefined) {
+					var songResults = 
+					'Artist: ' + songData[i].artists[0].name +
+					' Song: ' + songData[i].name +
+					' Album: ' + songData[i].album.name +
+					' Url: ' + songData[i].preview_url;
+					console.log(songResults); 
+				}
+			}
+		}
+
+		else {
 			return console.log('Error occurred: ' + err);
 		}
 		console.log(data);
