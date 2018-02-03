@@ -8,7 +8,10 @@ var spotify = require('node-spotify-api');
 var Spotify = new spotify(keys.spotify);
 var commands = process.argv[2];
 var inputString = process.argv
-var fs = require('fs');
+
+
+
+
 
 //Switch case to execute commands
 
@@ -28,7 +31,7 @@ switch(commands) {
 
 //Twitter function
 
-function showTweets(commands){
+function showTweets(username){
 	var username = inputString[3];
 
 	if(!username){
@@ -54,23 +57,23 @@ function showTweets(commands){
 
 // Spotify function
 
-function spotifySong(commands) {
+function spotifySong(song) {
 	var song = inputString[3];
-	if(!song){
+	if(song === undefined){
 		song = 'The Sign';
 	}
 	
 	Spotify.search({type:'track', query:song}, function (err,data){
 		if(!err){
 			songData = data.tracks.items;
-			for (var i = 0; i < 3; i++){
+			for (var i = 0; i < songData.length; i++){
 				if (songData[i] != undefined) {
-					var songResults = 
-					'Artist: ' + songData[i].artists[0].name + '\r\n' +
-					' Song: ' + songData[i].name + '\r\n' +
-					' Album: ' + songData[i].album.name + '\r\n' +
-					' Url: ' + songData[i].preview_url; 
-					console.log(songResults); 
+						var songResults =
+						"Artist: " + songData[i].artists[0].name + "\r\n" +
+						"Song: " + songData[i].name + "\r\n" +
+						"Album the song is from: " + songData[i].album.name + "\r\n" +
+						"Preview Url: " + songData[i].preview_url + "\r\n" + 
+						console.log(songResults);
 				}
 			}
 		}
@@ -78,25 +81,39 @@ function spotifySong(commands) {
 		else {
 			return console.log('Error occurred: ' + err);
 		}
-		console.log(data);
+		
 	})
 }
 
 // Movie Function
 
-function movies(commands){
+function movies(movie){
 	var movie = inputString[3];
+	console.log(movie);
 
-	if(!movie){
+	if(movie === undefined){
 		movie = "Mr. Nobody"
 	}
 
-	request('http://www.omdbapi.com/?apikey=84e6cb7d&t=' + movie + '&y=&plot=full&tomatoes-true&r=json', function (error,response,body){
-		if(!error && response.statusCode === 200){
-			var movieData = JSON.parse(body);
-			console.log(movieData)
-		}
-		else {
+	var urlOmdb ='http://www.omdbapi.com/?apikey=952a4b60&t=' + movie + '&y=&plot=full&tomatoes-true&r=json';
+
+	request( urlOmdb, function (error,response,body){
+		
+	        var movieData = JSON.parse(body);
+			//console.log(movieData)
+			var showMovie =
+                "Title: " + movieData.Title+"\r\n"+
+				"Year: " + movieData.Year+"\r\n"+
+				"Imdb Rating: " + movieData.imdbRating+"\r\n"+
+				"Country: " + movieData.Country+"\r\n"+
+				"Language: " + movieData.Language+"\r\n"+
+				"Plot: " + movieData.Plot+"\r\n"+
+				"Actors: " + movieData.Actors+"\r\n"+
+				"Rotten Tomatoes Rating: " + movieData.tomatoRating+"\r\n"+
+				"Rotten Tomatoes URL: " + movieData.tomatoURL + "\r\n" ;
+                 console.log(showMovie);
+		
+		if (error) {
 			console.log('Error: ' + error);
 			return;
 		}
@@ -111,8 +128,10 @@ function doWhatItSays() {
 		fs.readFile("random.txt", "utf8", function(error, data){
 			if (!error) {
 				doWhatItSaysResults = data.split(",");
-				spotifySong(doWhatItSaysResults[0], doWhatItSaysResults[1]);
+				var song = doWhatItSaysResults[1];
+				spotifySong(song);
 				console.log(doWhatItSaysResults[0]);
+				console.log(doWhatItSaysResults[1]);
 			} else {
 				console.log("Error occurred" + error);
 			}
