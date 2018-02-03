@@ -40,7 +40,7 @@ function showTweets(username){
 		var searchQuery = {screen_name: username};
 		client.get("statuses/user_timeline/", searchQuery, function(error, data, response){
 			if (!error) {
-				for(var i = 0; i < data.length; i++) {
+				for(var i = 0; i < 20; i++) {
 				
 					var twitterResults = 
 					"@" + data[i].user.screen_name + ": " + data[i].text;
