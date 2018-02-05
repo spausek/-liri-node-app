@@ -8,6 +8,9 @@ var spotify = require('node-spotify-api');
 var Spotify = new spotify(keys.spotify);
 var commands = process.argv[2];
 var inputString = process.argv
+var song = process.argv[3];
+var movie = process.argv[3]
+var username = process.argv[3];
 
 
 
@@ -123,6 +126,7 @@ function movies(movie){
 }
 
 //Do what it says function
+//Couldnt get this to take the song that was wrttiend in random.txt as an input to the function spotify song
 
 function doWhatItSays() {
 		fs.readFile("random.txt", "utf8", function(error, data){
